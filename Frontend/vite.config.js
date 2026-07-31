@@ -9,6 +9,8 @@ export default defineConfig({
     react(),
   ],
   server: {
+    // Allow WebContainer-generated preview hostnames (random subdomains)
+    allowedHosts: true,
     headers: {
       // Required for WebContainer (SharedArrayBuffer + WASM)
       'Cross-Origin-Opener-Policy': 'same-origin',

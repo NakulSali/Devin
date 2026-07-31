@@ -38,5 +38,12 @@ router.put('/update-file-tree',
     projectController.updateFileTree
 )
 
+router.post('/save-messages',
+    authMiddleWare.authUser,
+    body('projectId').isString().withMessage('Project ID is required'),
+    body('messages').isArray({ min: 1 }).withMessage('messages must be a non-empty array'),
+    projectController.saveMessages
+)
 
-export default router;
+
+export default router;

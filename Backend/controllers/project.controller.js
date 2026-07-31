@@ -75,12 +75,14 @@ export const getProjectById = async (req, res) => {
         if (!project) {
             return res.status(404).json({ error: 'Project not found' });
         }
+        console.log(`[GET PROJECT] id=${projectId} messages count=${project.messages?.length ?? 0}`)
         res.status(200).json({ project });
     } catch (error) {
         console.error(error);
         res.status(400).json({ error: error.message });
     }
 }
+
 
 export const updateFileTree = async (req, res) => {
     const errors = validationResult(req);
@@ -104,3 +106,23 @@ export const updateFileTree = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 }
+
+export const saveMessages = async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const { projectId, messages } = req.body;
+
+        const project = await projectService.saveMessages({ projectId, messages });
+
+        res.status(200).json({ project });
+
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ error: error.message });
+    }
+}

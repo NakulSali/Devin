@@ -125,13 +125,33 @@ export const updateFileTree = async ({ projectId, fileTree }) => {
         throw new Error("fileTree is required")
     }
 
-    const updatedProject = await projectModel.findOneAndUpdate({
-        _id: projectId
-    }, {
-        fileTree
-    }, {
-        new: true
-    })
+    const updatedProject = await projectModel.findOneAndUpdate(
+        { _id: projectId },
+        { fileTree },
+        { new: true }
+    )
 
     return updatedProject
 }
+
+export const saveMessages = async ({ projectId, messages }) => {
+    if (!projectId) throw new Error('projectId is required')
+    if (!mongoose.Types.ObjectId.isValid(projectId)) throw new Error('Invalid projectId')
+    if (!Array.isArray(messages) || messages.length === 0) throw new Error('messages must be a non-empty array')
+
+    const updatedProject = await projectModel.findByIdAndUpdate(
+        projectId,
+        { $push: { messages: { $each: messages } } },
+        { new: true }
+    )
+
+    return updatedProject
+}
+
+export const getMessages = async ({ projectId }) => {
+    if (!projectId) throw new Error('projectId is required')
+    if (!mongoose.Types.ObjectId.isValid(projectId)) throw new Error('Invalid projectId')
+
+    const project = await projectModel.findById(projectId).select('messages')
+    return project ? project.messages : []
+}

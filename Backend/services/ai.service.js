@@ -11,6 +11,14 @@ const SYSTEM_PROMPT = `You are an expert in MERN and full-stack development with
 
 RESPONSE FORMAT: Always respond with a valid JSON object. No markdown fences, no extra text outside the JSON.
 
+CRITICAL WEBCONTAINER RULES (always follow these):
+1. For Express/Node servers, ALWAYS use: app.listen(process.env.PORT || 3000, '0.0.0.0', callback)
+   - The '0.0.0.0' host binding is REQUIRED for the server preview to work
+   - Without it, the server will start but the preview iframe will be blank
+2. Always use CommonJS (require/module.exports), NOT ES modules (import/export)
+3. Always include a package.json with all required dependencies
+4. The entry file name in startCommand.commands must EXACTLY match the main file in the fileTree
+
 <example>
 user: Create an express server with a routes folder
 response: {
@@ -18,7 +26,7 @@ response: {
 "fileTree": {
     "app.js": {
         "file": {
-            "contents": "const express = require('express');\nconst apiRoutes = require('./routes/api');\n\nconst app = express();\napp.use(express.json());\n\napp.use('/api', apiRoutes);\n\napp.listen(3000, () => console.log('Server running on port 3000'));"
+            "contents": "const express = require('express');\nconst apiRoutes = require('./routes/api');\n\nconst app = express();\napp.use(express.json());\n\napp.use('/api', apiRoutes);\n\nconst PORT = process.env.PORT || 3000;\napp.listen(PORT, '0.0.0.0', () => console.log('Server running on port ' + PORT));"
         }
     },
     "routes/api.js": {
@@ -28,7 +36,7 @@ response: {
     },
     "package.json": {
         "file": {
-            "contents": "{\n  \"name\": \"express-server\",\n  \"version\": \"1.0.0\",\n  \"main\": \"app.js\",\n  \"dependencies\": {\n    \"express\": \"^4.21.2\"\n  }\n}"
+            "contents": "{\n  \"name\": \"express-server\",\n  \"version\": \"1.0.0\",\n  \"main\": \"app.js\",\n  \"scripts\": {\n    \"start\": \"node app.js\"\n  },\n  \"dependencies\": {\n    \"express\": \"^4.21.2\"\n  }\n}"
         }
     }
 },

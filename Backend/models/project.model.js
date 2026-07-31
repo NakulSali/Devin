@@ -13,13 +13,21 @@ const projectSchema = new mongoose.Schema({
     users: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'user'
+            ref: 'User'
         }
     ],
     fileTree: {
         type: Object,
         default: {}
     },
+
+    messages: [
+        {
+            sender: { type: mongoose.Schema.Types.Mixed, required: true },
+            message: { type: String, required: true },
+            timestamp: { type: Date, default: Date.now }
+        }
+    ],
 
 })
 
