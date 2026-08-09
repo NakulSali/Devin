@@ -5,22 +5,19 @@ import { sendMessage } from '../config/socket'
 
 // Hooks
 import { useNotifications } from '../hooks/useNotifications'
-import { useWebContainer }  from '../hooks/useWebContainer'
+import { useWebContainer } from '../hooks/useWebContainer'
 import { useProjectSocket } from '../hooks/useProjectSocket'
 
 // Components
-import Toast              from '../components/project/Toast'
-import ChatPanel          from '../components/project/ChatPanel'
-import EditorPanel        from '../components/project/EditorPanel'
-import CollaboratorModal  from '../components/project/CollaboratorModal'
+import Toast from '../components/project/Toast'
+import ChatPanel from '../components/project/ChatPanel'
+import EditorPanel from '../components/project/EditorPanel'
+import CollaboratorModal from '../components/project/CollaboratorModal'
 
 // Utilities
 import { buildNestedTree } from '../utils/project/treeHelpers'
 import axios from '../config/axios'
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PROJECT  —  slim orchestrator (~150 lines)
-// ─────────────────────────────────────────────────────────────────────────────
 
 const Project = () => {
     const location = useLocation()
@@ -28,28 +25,28 @@ const Project = () => {
     const messageBox = useRef(null)
 
     // ── Core state ────────────────────────────────────────────────────────
-    const [project,         setProject]         = useState(location.state?.project || null)
-    const [message,         setMessage]         = useState('')
-    const [messages,        setMessages]        = useState([])
-    const [users,           setUsers]           = useState([])
-    const [fileTree,        setFileTree]        = useState({})
+    const [project, setProject] = useState(location.state?.project || null)
+    const [message, setMessage] = useState('')
+    const [messages, setMessages] = useState([])
+    const [users, setUsers] = useState([])
+    const [fileTree, setFileTree] = useState({})
 
     // ── Editor state ──────────────────────────────────────────────────────
-    const [currentFile,     setCurrentFile]     = useState(null)
-    const [openFiles,       setOpenFiles]       = useState([])
+    const [currentFile, setCurrentFile] = useState(null)
+    const [openFiles, setOpenFiles] = useState([])
     const [expandedFolders, setExpandedFolders] = useState(new Set())
-    const [inputFocused,    setInputFocused]    = useState(false)
+    const [inputFocused, setInputFocused] = useState(false)
 
     // ── UI state ──────────────────────────────────────────────────────────
     const [isSidePanelOpen, setIsSidePanelOpen] = useState(false)
-    const [isModalOpen,     setIsModalOpen]     = useState(false)
-    const [selectedUserId,  setSelectedUserId]  = useState(new Set())
-    const [isTerminalOpen,  setIsTerminalOpen]  = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [selectedUserId, setSelectedUserId] = useState(new Set())
+    const [isTerminalOpen, setIsTerminalOpen] = useState(false)
 
     // ── Terminal state ────────────────────────────────────────────────────
-    const [terminalLog,   setTerminalLog]   = useState([{ type: 'system', text: 'Terminal ready. Click ▶ Run or type a command below.' }])
+    const [terminalLog, setTerminalLog] = useState([{ type: 'system', text: 'Terminal ready. Click ▶ Run or type a command below.' }])
     const [terminalInput, setTerminalInput] = useState('')
-    const terminalRef      = useRef(null)
+    const terminalRef = useRef(null)
     const terminalInputRef = useRef(null)
 
     // ── Notifications ─────────────────────────────────────────────────────
