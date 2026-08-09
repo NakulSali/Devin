@@ -9,7 +9,7 @@ export const initializeSocket = (projectId) => {
     socketInstance = null
   }
 
-  socketInstance = socket(import.meta.env.VITE_API_URL, {
+  socketInstance = socket('https://devin-qjj4.onrender.com', {
     auth: {
       token: localStorage.getItem('token')
     },
